@@ -130,6 +130,7 @@ def main():
             pred = model(img).max(1)[1].cpu().numpy()[0] # HW
             colorized_preds = decode_fn(pred).astype('uint8')
             colorized_preds = Image.fromarray(colorized_preds)
+            return colorized_preds
             if opts.save_val_results_to:
                 colorized_preds.save(os.path.join(opts.save_val_results_to, img_name+'.png'))
 
