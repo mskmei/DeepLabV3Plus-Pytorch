@@ -130,9 +130,11 @@ def main():
             pred = model(img).max(1)[1].cpu().numpy()[0] # HW
             colorized_preds = decode_fn(pred).astype('uint8')
             colorized_preds = Image.fromarray(colorized_preds)
+            mix = Image.blend(img,colorized_preds,0.7)
             return colorized_preds
             if opts.save_val_results_to:
                 colorized_preds.save(os.path.join(opts.save_val_results_to, img_name+'.png'))
+                mix.save(os.path.join("mix_result", img_name+'.png'))
 
 if __name__ == '__main__':
     main()
