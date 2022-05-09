@@ -118,6 +118,7 @@ def main():
             ])
     if opts.save_val_results_to is not None:
         os.makedirs(opts.save_val_results_to, exist_ok=True)
+        os.makedirs("mix_results", exist_ok=True)
     with torch.no_grad():
         model = model.eval()
         for img_path in tqdm(image_files):
@@ -130,13 +131,12 @@ def main():
             pred = model(img).max(1)[1].cpu().numpy()[0] # HW
             colorized_preds = decode_fn(pred).astype('uint8')
             colorized_preds = Image.fromarray(colorized_preds)
-            return colorized_preds
             if opts.save_val_results_to:
-                colorized_preds.save(os.path.join(opts.save_val_results_to, img_name+'.png')
-                img = img.convert('RGBA')
-                colorized_preds = colorized_preds.convert('RGBA') 
-                mix = Image.blend(img,colorized_preds,0.7)
-                mix.save(os.path.join("mix_result", img_name+'.png'))
+                colorized_preds.save(os.path.join(opts.save_val_results_to, img_name+'.png'))
+                img1 = Image.open(img_path).convert('RGBA')
+                img2 = colorized_preds.convert('RGBA') 
+                mix = Image.blend(img1,img2,0.7)
+                mix.save(os.path.join("mix_results", img_name+'.png'))
 
 if __name__ == '__main__':
     main()
